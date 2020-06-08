@@ -47,3 +47,9 @@ $ docker inspect alpine-node-app
 $ docker run -dit --init --rm -p 8085:8085 alpine-node-app
 $ curl -i http://0.0.0.0:8085
 ```
+
+## multi stages
+
+`Dockerfile`中可以声明多个stage，可以用于对应应用的编译/构建、运行等阶段。在生产环境中大多情况下我们只关心运行时环境，而不必关心编译/构建时所依赖的环境，此时就可以将这两个环境对应的动作拆分为两个stage，在运行时stage中只需要拿到编辑/构建stage中产生的资源，再搭配上运行时环境即可达到我们的目的。
+
+具体方式可参照[./Dockerfile](./Dockerfile)，将安装依赖等过程放置于一个stage（在`node:12-stretch`容器中进行，其拥有node环境），将运行过程放置于另一个stage（在`alpine:3.10`中进行，处于安全性、体积等方面考虑）。
